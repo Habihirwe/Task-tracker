@@ -130,28 +130,43 @@ const  getAllsubtasks= async(req, res)=> {
 
   }
 
-  const  deletesubtask = async (req,res)=>{
-    try{
-        const subtask= await Subtask.findById(req.params.id)
-        if(!subtask){
-            return res.status(404).json({
-                status:'fail',
-                error:"subtask does not exist"
-            })
-        } 
-        await subtask.deleteOne();
-         return res.status(200).json({
-             status: "success",
-              message: "Subtask deleted successfully",
-          });
-
-    }catch(err){
-        return res.status(500).json({
-            error:err.message
-        })
-
+  const deletesubtask = async (req, res) => {
+    try {
+      const subtaskId = req.params.id;
+      const subtask = await Subtask.findById(subtaskId);
+  
+      if (!subtask) {
+        return res.status(404).json({
+          status: 'fail',
+          error: "Subtask does not exist",
+        });
+      }
+  
+      const associatedTask = await Task.findById(subtask.task);
+      if (!associatedTask) {
+        return res.status(404).json({
+          status: 'fail',
+          error: "Associated task not found",
+        });
+      }
+      associatedTask.subtasks = associatedTask.subtasks.filter(
+        (taskId) => taskId.toString() !== subtaskId.toString()
+      );
+  
+      await associatedTask.save();
+      await subtask.deleteOne();
+  
+      return res.status(200).json({
+        status: "success",
+        message: "Subtask deleted successfully",
+      });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+      });
     }
-  }
+  };
+  
 
   const updatesubtask= async(req, res)=> {
     try {

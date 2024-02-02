@@ -24,14 +24,10 @@ const taskSchema = mongoose.Schema({
        required:true
     },
     subtasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subtask' }],
-    deadline:{
-        type:Date,
-        required:true
-    },
     status:{
         type:String,
-        enum:['queuing','started','completed','canceled'],
-        default:'queuing'
+        enum:['Queuing','Started','Completed','Canceled'],
+        default:'Queuing'
     },
     dateCreated: {
         type: 'date',

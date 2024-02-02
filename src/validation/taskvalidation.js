@@ -9,10 +9,10 @@ const taskValidationSChema = Joi.object ({
     description: Joi.string().required().label("description").messages({
       "any.required": "The  description field can not be empty"
   }),
-    starteddate:Joi.string().required().label("description").messages({
+    starteddate:Joi.string().required().label("startingtime").messages({
     "any.required": "The  description field can not be empty"
   }),
-  deadline:Joi.string().required().label("description").messages({
+  priority:Joi.string().required().label("priority").messages({
     "any.required": "The  description field can not be empty"
   }),
 

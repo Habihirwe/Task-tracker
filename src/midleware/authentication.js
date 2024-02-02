@@ -2,7 +2,7 @@ import Jwt from "jsonwebtoken";
 
 
 const authLogin = async (request, response, next) => {
-  var token = request.headers["auth_token"];
+  var token = request?.headers?.authorization?.split(' ')[1];
   if (!token) {
     return response.status(401).json({
       invalidToken: "Please Login to continue!",

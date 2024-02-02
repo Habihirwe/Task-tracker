@@ -21,8 +21,8 @@ const createUser= async(req,res)=>{
 
 
         const user= new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             email:req.body.email,
             password: hashedpassword,
             repeatPassword: hashedrepeatpassword
@@ -33,7 +33,6 @@ const createUser= async(req,res)=>{
             status: "success", 
             "successMessage":"account created successfully",
             user: user});
-            console.log("User registered successfully!");
 
     }catch(err){
         res.status(500).json(

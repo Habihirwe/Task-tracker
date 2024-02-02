@@ -1,12 +1,12 @@
 import Joi from "joi";
 
 const userValidationSchema = Joi.object({
-    firstName: Joi.string().required().min(2).label("Name").regex(/^[A-Za-z]+$/).messages({
+    firstname: Joi.string().required().min(2).label("firstname").regex(/^[A-Za-z]+$/).messages({
         "string.pattern.base": "The name field can not include numbers and special characters",
         "string.empty": "The name field can not be empty"
     }),
 
-    lastName: Joi.string().required().min(2).label("Name").regex(/^[A-Za-z]+$/).messages({
+    lastname: Joi.string().required().min(2).label("lastname").regex(/^[A-Za-z]+$/).messages({
         "string.pattern.base": "The name field can not include numbers and special characters",
         "string.empty": "The name field can not be empty"
     }),
