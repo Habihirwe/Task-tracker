@@ -103,12 +103,84 @@ const deletetask = async (req, res) => {
   }
 };
 
+// const updateTaskStatus = async (req, res) => {
+//   try {
+//     const taskId = req.params.id
+//     console.log('taskId','hjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+//     const newstatus= req.body.status
+//     console.log(newstatus)
+//     const existingTask = await Task.findById(taskId);
+//     console.log(existingTask)
+
+//     if (!existingTask) {
+//       return res.status(404).json({
+//         status: "fail",
+//         error: "Task not found",
+//       });
+//     }
+
+//     if (!Task.schema.path("status").enumValues.includes(newstatus)) {
+//       return res.status(400).json({ message: "Invalid status value" });
+//     }
+
+//     if (existingTask.status === "Started" && newstatus === "Queuing") {
+//       return res
+//         .status(400)
+//         .json({ message: "Cannot transition from started to queuing" });
+//     }
+
+//     if (
+//       (existingTask.status === "Completed" ||
+//         existingTask.status === "Canceled") &&
+//       newstatus !== "Completed"
+//     ) {
+//       return res
+//         .status(400)
+//         .json({
+//           message:
+//             "Cannot transition from completed/canceled to a different status",
+//         });
+//     }
+
+//     if (existingTask.status === "Canceled") {
+//       return res
+//         .status(400)
+//         .json({ message: "Cannot be updated to another status when canceled" });
+//     }
+
+//     if (existingTask.subtasks.length === 0) {
+//       existingTask.status = "Completed";
+//     } else {
+//       const allSubtasksCompleted = existingTask.subtasks.every(
+//         async (subtaskId) => {
+//           const subtask = await Subtask.findById(subtaskId);
+//           return subtask && subtask.status === "Completed";
+//         }
+//       );
+
+//       existingTask.status = allSubtasksCompleted ? "Completed" : newStatus;
+//     }
+
+//     const updatedTask = await existingTask.save();
+
+//     return res.status(201).json({
+//       status: "success",
+//       message: "Task status updated",
+//       data: updatedTask,
+//     });
+//   } catch (err) {
+//     return res.status(500).json({
+//       status: "fail",
+//       error: err.message,
+//     });
+//   }
+// };
+
 const updateTaskStatus = async (req, res) => {
   try {
     const taskId = req.params.taskId;
     const newStatus = req.body.status;
     const existingTask = await Task.findById(taskId);
-    console.log(existingTask)
 
     if (!existingTask) {
       return res.status(404).json({
@@ -145,20 +217,10 @@ const updateTaskStatus = async (req, res) => {
         .status(400)
         .json({ message: "Cannot be updated to another status when canceled" });
     }
-
-    if (existingTask.subtasks.length === 0) {
-      existingTask.status = "Completed";
-    } else {
-      const allSubtasksCompleted = existingTask.subtasks.every(
-        async (subtaskId) => {
-          const subtask = await Subtask.findById(subtaskId);
-          return subtask && subtask.status === "Completed";
-        }
-      );
-
-      existingTask.status = allSubtasksCompleted ? "Completed" : newStatus;
-    }
-
+    const allSubtasksCompleted = existingTask.subtasks.every(
+      (subtask) => subtask.status === "Completed"
+    );
+    existingTask.status = allSubtasksCompleted ? "Completed" : newStatus;
     const updatedTask = await existingTask.save();
 
     return res.status(201).json({
@@ -169,7 +231,7 @@ const updateTaskStatus = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       status: "fail",
-      error: err.message,
+      error: err,
     });
   }
 };
