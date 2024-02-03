@@ -10,7 +10,7 @@ import subtaskRoute from "./Routes/subtaskRouter.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({origin: '*' }));
 
 app.use(bodyParser.json({limit: "100mb"}));
 app.use(bodyParser.urlencoded({extended: false}));
