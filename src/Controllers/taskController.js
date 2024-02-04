@@ -144,10 +144,8 @@ const updateTaskStatus = async (req, res) => {
         .status(400)
         .json({ message: "Cannot be updated to another status when canceled" });
     }
-    const allSubtasksCompleted = existingTask.subtasks.every(
-      (subtask) => subtask.status === "Completed"
-    );
-    existingTask.status = allSubtasksCompleted ? "Completed" : newStatus;
+
+    existingTask.status =  newStatus;
     const updatedTask = await existingTask.save();
 
     return res.status(201).json({
