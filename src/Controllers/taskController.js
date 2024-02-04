@@ -144,10 +144,19 @@ const updateTaskStatus = async (req, res) => {
         .status(400)
         .json({ message: "Cannot be updated to another status when canceled" });
     }
+    const allSubtasksCompleted = existingTask.subtasks.every(
+      (subtask) => subtask.status === "Completed"
+    );
+
+    if(!allSubtasksCompleted){
+      return res.status(404).json({
+        status:"fail",
+        message:"you can not mark task as complete"
+      })
+    }
 
     existingTask.status =  newStatus;
     const updatedTask = await existingTask.save();
-
     return res.status(201).json({
       status: "success",
       message: "Task status updated",
